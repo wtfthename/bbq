@@ -1,0 +1,62 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="page__hd">
+     <!-- <image src='../../static/img/timg.jpg'></image>  -->
+    <swiper indicator-dots="false" autoplay="true" interval="2000" duration="500">
+      <block wx:for="{{imgUrls}}" wx:key="*this">
+        <swiper-item>
+          <image src="{{item}}" class="slide-image" width="355" height="150" />
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <view class="weui-tab">
+    <view class="weui-navbar" style='background-color: #fa8919;'>
+      <block wx:for="{{tabs}}" wx:key="*this">
+        <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+          <view class="weui-navbar__title">{{item}}</view>
+        </view>
+      </block>
+      <view class="weui-navbar__slider" style="left: {{sliderLeft}}px;width: {{sliderWidth}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+    </view>
+    <view class="weui-tab__panel">
+      <view class="weui-tab__content" wx:for="{{menu}}"  wx:key="*this" hidden="{{activeIndex != index}}">
+        <view class="item" wx:for="{{menu[activeIndex]}}" wx:key="*this">
+          <view style='padding-left:20px;text-align:left;' bindtap='getData'>{{item.detail}}</view>
+          <view class="numCtrl">
+            <button disabled='{{menu[activeIndex][index].num === 0}}' bindtap="cutNum" data-index="{{index}}">-</button>
+            <button>{{menu[activeIndex][index].num}}</button>
+            <button bindtap="addNum" data-index="{{index}}">+</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view> -->
+  <view style="display: flex;position: fixed; bottom: 0;width: 100%; height: 80rpx; background-color: #1aad19">
+    <view bindtap='showOrderMenu' class='iconfont icon-gouwuche' style="position: absolute;width: 80rpx; height: 80rpx;line-height: 80rpx;color:red;">
+      <view hidden='{{totalNum === 0}}' class='car'>{{totalNum}}</view>
+    </view>
+    <view style='display: flex;box-sizing: border-box;width: 60%; height: 100%;line-height: 80rpx; padding-left:100rpx;'>
+      <text space='nbsp'>￥: </text>
+      <view hidden='{{totalPrice === 0}}'>{{totalPrice}}
+        <text space='nbsp'> (RMB)</text>
+      </view>
+    </view>
+    <button bindtap='postData' style='width: 40%;border-radius:0;line-height: 80rpx;'>下单</button>
+  </view>
+  <view hidden="{{showDialog}}" bindtap='closeDialog' class='dialog'>
+    <view>已购清单</view>
+    <view style='padding-left:20px;display: flex;width: 100%' wx:for="{{orderMenu}}" wx:key="*this">
+      <text style='width:40%;text-align:left;'>{{item.detail}}:</text>
+      <text style='width:30%;text-align:left;'>数量：{{item.num}}</text>
+      <text style='width:30%;text-align:left;'>价格：{{item.price*item.num}}</text>
+    </view>
+  </view>
+</view>
